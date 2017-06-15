@@ -19,6 +19,14 @@ snippet afterclause
 		${3}
 	}
 
+snippet snapshot
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+
 snippet foreach
 	foreach (${1:i}: ${2:int}; ${3:condition}) {
 		${4}
