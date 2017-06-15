@@ -1,0 +1,47 @@
+################
+# Boa snippets #
+################
+
+snippet visitor
+	visit(${1:input}, visitor {
+		${2:before} ${3:n}: ${4:type} -> {
+			${5}
+		}
+	});
+
+snippet beforeclause
+	before ${1:n}: ${2:type} -> {
+		${3}
+	}
+
+snippet afterclause
+	after ${1:n}: ${2:type} -> {
+		${3}
+	}
+
+snippet foreach
+	foreach (${1:i}: ${2:int}; ${3:condition}) {
+		${4}
+	}
+
+snippet exists
+	exists (${1:i}: ${2:int}; ${3:condition}) {
+		${4}
+	}
+
+snippet ifall
+	ifall (${1:i}: ${2:int}; ${3:condition}) {
+		${4}
+	}
+
+snippet if
+	if (${1:condition}) {
+		${2}
+	}
+
+snippet ife
+	if (${1:condition}) {
+		${2}
+	} else {
+		${3}
+	}
