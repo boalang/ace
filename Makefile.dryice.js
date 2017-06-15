@@ -237,7 +237,7 @@ function buildAceModuleInternal(opts, callback) {
         paths: {
             ace: ACE_HOME + "/lib/ace",
             "kitchen-sink": ACE_HOME + "/demo/kitchen-sink",
-            build_support:  ACE_HOME + "/build_support",
+            build_support:  ACE_HOME + "/build_support"
         },
         root: ACE_HOME
     };
@@ -287,7 +287,7 @@ function buildAceModuleInternal(opts, callback) {
         
         build.writeToFile({code: code}, {
             outputFolder: path.dirname(to),
-            outputFile: path.basename(to),
+            outputFile: path.basename(to)
         }, function() {});
         
         callback && callback(err, result);
@@ -333,11 +333,11 @@ function buildSubmodule(options, extra, file, callback) {
     });
 }
 
-function buildAce(options) {
+function buildAce(options, callback) {
     var snippetFiles = jsFileList("lib/ace/snippets");
     var modeNames = modeList();
 
-    buildCore(options, {outputFile: "ace.js"}, addCb()),
+    buildCore(options, {outputFile: "ace.js"}, addCb());
     // modes
     modeNames.forEach(function(name) {
         buildSubmodule(options, {
@@ -351,7 +351,7 @@ function buildAce(options) {
             addSnippetFile(name);
         
         buildSubmodule(options, {
-            require: ["ace/snippets/" + name],
+            require: ["ace/snippets/" + name]
         }, "snippets/" + name, addCb());
     });
     // themes
@@ -385,7 +385,7 @@ function buildAce(options) {
                 id: "ace/worker/worker",
                 transforms: [],
                 order: -1000
-            }],
+            }]
         }, "worker-" + name, addCb());
     });
     // 
@@ -397,7 +397,9 @@ function buildAce(options) {
         if (--addCb.count > 0)
             return;
         if (options.check)
-            sanityCheck(options)
+            sanityCheck(options, callback);
+        if (callback) 
+            return callback();
         console.log("Finished building " + getTargetDir(options))
     }
 }
@@ -501,7 +503,10 @@ function exportAce(ns, modules, requireBase, extModules) {
         var template = function() {
             (function() {
                 REQUIRE_NS.require(MODULES, function(a) {
-                    a && a.config.init(true);
+                    if (a) {
+                        a.config.init(true);
+                        a.define = REQUIRE_NS.define;
+                    }
                     if (!window.NS)
                         window.NS = a;
                     for (var key in a) if (a.hasOwnProperty(key))
@@ -589,7 +594,7 @@ function getTargetDir(opts) {
     return targetDir;
 }
 
-function sanityCheck(opts) {
+function sanityCheck(opts, callback) {
     var targetDir = getTargetDir(opts);
     require("child_process").execFile(process.execPath, ["-e", "(" + function() {
         window = global;
@@ -604,6 +609,7 @@ function sanityCheck(opts) {
     } + ")()"], {
         cwd: targetDir
     }, function(err, stdout) {
+        if (callback) return callback(err, stdout);
         if (err)
             throw err;
     });
