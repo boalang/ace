@@ -27,6 +27,28 @@ snippet snapshot
 		stop;
 	}
 
+snippet traversal
+	${1:name} := traversal(${2:node}: ${3:CFGNode}) {
+		${4}
+	};
+
+snippet traversal-return
+	${1:name} := traversal(${2:node}: ${3:CFGNode}) : {$4} {
+		${5}
+		return ${6};
+	};
+
+snippet traverse
+	traverse(${1:cfg}, TraversalDirection.${2:BACKWARD}, TraversalKind.${3:HYBRID}, ${4});
+
+snippet traverse-fp
+	traverse(${1:cfg}, TraversalDirection.${2:BACKWARD}, TraversalKind.${3:HYBRID}, ${4}, ${5:fp});
+
+snippet fixp
+	${1:name} := fixp(${2:curr}, ${3:prev}: ${4}) : bool {
+		return ${5};
+	};
+
 snippet foreach
 	foreach (${1:i}: ${2:int}; ${3:condition}) {
 		${4}
